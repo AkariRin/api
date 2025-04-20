@@ -28,7 +28,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build TypeScript
+      - name: Build Docs
+        run: npm run docs:build
+
+      - name: Build App
         run: npm run build
 
       # Add support for more platforms with QEMU

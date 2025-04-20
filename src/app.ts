@@ -1,34 +1,28 @@
 import fastify, { FastifyInstance } from 'fastify'
 import { readdirSync, statSync } from 'fs'
-import { join, resolve } from 'path'
-// import staticPlugin from '@fastify/static'
+import path from 'path'
+import staticPlugin from '@fastify/static'
 
 const app: FastifyInstance = fastify({
     logger: true
 })
 
-/* TODO
+
 // 加载文档
 app.register(staticPlugin, {
-    root: path.join(__dirname, '../docs'),
-    prefix: '/docs/',
-    list: true
+    root: path.join(__dirname, '../docs/.vuepress/dist'),
+    prefix: '/',
 })
-// 根路径重定向
-app.get('/', async (_, reply) => {
-    reply.redirect('/docs', 302)
-})
-*/
 
 // 自动注册api路由
 async function registerApis(fastify: FastifyInstance) {
-    const apiRoot = resolve(__dirname, 'apis')
+    const apiRoot = path.resolve(__dirname, 'apis')
 
     // 遍历api目录下的所有子目录
     readdirSync(apiRoot)
-        .filter(file => statSync(join(apiRoot, file)).isDirectory())
+        .filter(file => statSync(path.join(apiRoot, file)).isDirectory())
         .forEach(dir => {
-            const routePath = join(apiRoot, dir, 'index.ts')
+            const routePath = path.join(apiRoot, dir, 'index.ts')
 
             try {
                 // 注册路由
