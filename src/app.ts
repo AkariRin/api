@@ -7,37 +7,28 @@ const app: FastifyInstance = fastify({
     logger: true
 })
 
-
-// 加载文档
+// 注册文档路由
 app.register(staticPlugin, {
     root: path.join(__dirname, '../docs/.vuepress/dist'),
     prefix: '/',
 })
 
 // 自动注册api路由
-async function registerApis(fastify: FastifyInstance) {
-    const apiRoot = path.resolve(__dirname, 'apis')
+const apiRoot = path.resolve(__dirname, 'apis')
+readdirSync(apiRoot)
+    .filter(file => statSync(path.join(apiRoot, file)).isDirectory())
+    .forEach(dir => {
+        try {
+            app.register(require(path.join(apiRoot, dir, 'index.ts')).default, { prefix: `/api/${dir}` })
+            app.log.info(`API:[${dir}]注册成功`)
+        } catch (error) {
+            app.log.error(`API:[${dir}]注册失败:${error}`)
+        }
+    })
 
-    // 遍历api目录下的所有子目录
-    readdirSync(apiRoot)
-        .filter(file => statSync(path.join(apiRoot, file)).isDirectory())
-        .forEach(dir => {
-            const routePath = path.join(apiRoot, dir, 'index.ts')
-
-            try {
-                // 注册路由
-                fastify.register(require(routePath).default, { prefix: `/api/${dir}` })
-                fastify.log.info(`API:[${dir}]注册成功`)
-            } catch (error) {
-                fastify.log.error(`API:[${dir}]注册失败:${error}`)
-            }
-        })
-}
-
-// 启动服务器
+// 启动实例
 const start = async () => {
     try {
-        await registerApis(app)
         await app.listen({ port: 1028 })
     } catch (err) {
         app.log.error(err)
