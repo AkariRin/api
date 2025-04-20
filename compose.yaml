@@ -1,0 +1,6 @@
+services:
+  api:
+    image: akaririn/api:latest
+    ports:
+      - 1028:1028
+    restart: always
