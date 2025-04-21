@@ -20,9 +20,9 @@ readdirSync(apiRoot)
     .forEach(dir => {
         try {
             app.register(require(path.join(apiRoot, dir, 'index.ts')).default, { prefix: `/api/${dir}` })
-            app.log.info(`API:[${dir}]注册成功`)
+            app.log.info(`API[${dir}] registered`)
         } catch (error) {
-            app.log.error(`API:[${dir}]注册失败:${error}`)
+            app.log.error(`API[${dir}] register failed:${error}`)
         }
     })
 
