@@ -17,7 +17,7 @@ app.register(staticPlugin, {
 // 启动实例
 const start = async () => {
     try {
-        await app.listen({ port: 1028 })
+        await app.listen({ port: 1028, host: '0.0.0.0' })
     } catch (err) {
         app.log.error(err)
         process.exit(1)
