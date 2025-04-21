@@ -17,7 +17,7 @@ LABEL authors="梦清"
 WORKDIR /app
 
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/docs/.vitepress/dist ./docs
+COPY --from=builder /app/docs/.vuepress/dist ./docs
 
 COPY package.json pnpm-lock.yaml* ./
 RUN corepack enable && \
