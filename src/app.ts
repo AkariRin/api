@@ -21,12 +21,17 @@ app.register<StaticPluginConfig>(staticPlugin, {
 // 注册api路由
 app.register(autoload, {
   dir: path.join(__dirname, "apis"),
-  prefix: "/api/",
+  options: { prefix: "/api" },
   dirNameRoutePrefix: true,
-  indexPattern: /^index\.(js|ts)$/,
-  ignorePattern: /.*\.test\.js/,
   routeParams: true,
 });
+
+// 开发模式下打印全部路由
+if (process.env.NODE_ENV === "development") {
+  app.ready(() => {
+    console.log(app.printRoutes());
+  });
+}
 
 // 启动实例
 const init = async () => {
