@@ -26,3 +26,5 @@ RUN corepack enable && \
 ENV NODE_ENV=production
 EXPOSE 1028
 ENTRYPOINT ["node", "dist/app.js"]
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s \
+  CMD curl -f http://localhost:3000/api || exit 1
