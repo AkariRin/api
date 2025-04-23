@@ -3,4 +3,7 @@ services:
     image: akaririn/api:latest
     ports:
       - "1028:1028"
+    environment:
+      ENABLE_METRICS: true
+      METRICS_TOKEN: "A strong password here"
     restart: always

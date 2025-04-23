@@ -2,6 +2,7 @@ import fastify, { FastifyInstance } from "fastify";
 import autoload from "@fastify/autoload";
 import path from "path";
 import staticPlugin from "@fastify/static";
+import prom from "prom-client";
 
 const app: FastifyInstance = fastify({
   logger: true,
@@ -17,6 +18,19 @@ app.register<StaticPluginConfig>(staticPlugin, {
   root: path.join(__dirname, "../docs"),
   prefix: "/",
 });
+
+// 注册Prometheus监控端点路由
+if (process.env.ENABLE_METRICS ?? false) {
+  app.get("/metrics", async (req, reply) => {
+    if (req.headers.authorization !== process.env.METRICS_TOKEN) {
+      reply.code(403).send({ msg: "Access denied" });
+      return;
+    }
+
+    reply.header("Content-Type", prom.register.contentType);
+    return prom.register.metrics();
+  });
+}
 
 // 注册api路由
 app.register(autoload, {
