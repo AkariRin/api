@@ -1,4 +1,6 @@
 # Akari APIs
+
+![GitHub Repo stars](https://img.shields.io/github/stars/AkariRin/api?style=flat-square)
 ![GitHub License](https://img.shields.io/github/license/AkariRin/api?style=flat-square)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/AkariRin/api/build.yml?style=flat-square)
 ![Service Status](https://status.akari.moe/api/badge/21/status?style=flat-square)
